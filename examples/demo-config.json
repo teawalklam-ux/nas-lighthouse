@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 3,
+  "sshAlias": "my-nas",
+  "nasHost": "192.0.2.10",
+  "navItems": [],
+  "overviewContainerNames": [],
+  "watchPorts": [],
+  "containerTitles": {},
+  "collector": {
+    "netIface": null,
+    "diskMounts": [],
+    "probeHosts": [],
+    "linkAgentProcess": null
+  },
+  "ui": {
+    "internetProbeEnabled": false,
+    "autostart": false
+  },
+  "search": {
+    "everythingHttp": "http://127.0.0.1:80",
+    "everythingExecutable": "",
+    "alistUrl": "",
+    "alistContainer": "alist",
+    "alistBackend": "alist",
+    "quarkMount": "/夸克",
+    "baiduMount": "/百度"
+  }
+}

@@ -1,0 +1,32 @@
+[package]
+name = "nas-lighthouse"
+version = "0.1.0"
+description = "NAS Lighthouse — 桌面端 NAS 状态面板与服务导航"
+authors = ["NAS Lighthouse contributors"]
+license = "MIT"
+edition = "2021"
+
+[lib]
+name = "nas_lighthouse_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = ["tray-icon"] }
+tauri-plugin-opener = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "process", "io-util", "time", "sync", "net"] }
+reqwest = { version = "0.13", default-features = false, features = ["rustls", "gzip", "charset", "json", "system-proxy"] }
+base64 = "0.22"
+anyhow = "1"
+thiserror = "2"
+netstat2 = "0.11"
+tauri-plugin-autostart = "2.5.1"
+tauri-plugin-global-shortcut = "2.3.2"
+tauri-plugin-single-instance = "2.4.4"
+
+[target."cfg(windows)".dependencies]
+winreg = "0.55"

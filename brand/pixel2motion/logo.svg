@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 80 80" role="img" aria-labelledby="logo-title logo-desc">
+  <title id="logo-title">NAS Lighthouse</title>
+  <desc id="logo-desc">紫色灯塔与向左回返的光束，置于白色圆角方形中</desc>
+  <g id="tile" style="transform-box:fill-box;transform-origin:center">
+    <rect id="background" x="4" y="4" width="72" height="72" rx="16" fill="#fff"/>
+  </g>
+  <g id="mark" transform="translate(7.2 7.2) scale(.82)">
+    <g id="lighthouse" style="transform-box:fill-box;transform-origin:center">
+      <path id="tower-body" fill="#6d5dfc" d="M28 38h24l4 34H24l4-34Z" style="transform-box:fill-box;transform-origin:center bottom"/>
+      <rect id="tower-window" x="35" y="48" width="10" height="12" fill="#fff" style="transform-box:fill-box;transform-origin:center"/>
+      <path id="lantern-house" fill="#6d5dfc" d="M16 26h10V11L40 2l14 9v27H16V26Z" style="transform-box:fill-box;transform-origin:center bottom"/>
+      <path id="lamp-window" fill="#fff" d="M34 26V16l6-5 6 5v10H34Z" style="transform-box:fill-box;transform-origin:center"/>
+    </g>
+    <path id="signal" fill="#6d5dfc" d="m73 16-16 13 16 13 6-6-10-7 10-7-6-6Z" style="transform-box:fill-box;transform-origin:left center"/>
+  </g>
+</svg>

@@ -1,0 +1,737 @@
+html.overlay-root {
+  --ink: #ffffff;
+  --muted: #edf3e7;
+  --accent: #c9ff3d;
+  --ok: #3ee07a;
+  --warn: #e2c04a;
+  --danger: #ff6b6b;
+  color-scheme: only light;
+  background: transparent !important;
+}
+
+html.overlay-root,
+html.overlay-root body,
+html.overlay-root #root {
+  margin: 0;
+  height: 100%;
+  background: transparent !important;
+  overflow: hidden;
+  user-select: none;
+  pointer-events: none;
+}
+
+.overlay-shell {
+  height: 100%;
+  padding: 3px 10px;
+  display: flex;
+  align-items: stretch;
+  background: transparent;
+  box-sizing: border-box;
+  position: relative;
+  pointer-events: none;
+}
+.overlay-shell.is-docked {
+  align-items: center;
+  padding: 0;
+}
+.overlay-shell.is-mini {
+  align-items: center;
+  padding: 0;
+  background: transparent;
+}
+.overlay-shell.is-dock-right {
+  justify-content: flex-end;
+}
+.overlay-shell.is-dock-left {
+  justify-content: flex-start;
+}
+.overlay-shell.is-dock-right .liquid-capsule {
+  position: absolute;
+  right: 0;
+  left: auto;
+  top: 0;
+  height: 100%;
+  transform-origin: right center;
+}
+.overlay-shell.is-dock-left .liquid-capsule {
+  position: absolute;
+  left: 0;
+  right: auto;
+  top: 0;
+  height: 100%;
+  transform-origin: left center;
+}
+
+.liquid-capsule {
+  --liquid-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  box-sizing: border-box;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0;
+  min-width: 0;
+  min-height: 0;
+  padding: 2px 13px;
+  border-radius: 999px;
+  color: var(--ink);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.015) 40%, transparent 100%),
+    rgba(16, 20, 18, 0.3);
+  border: 0;
+  box-shadow:
+    inset 0 0 2px 1px rgba(255, 255, 255, 0.34),
+    inset 0 0 8px 3px rgba(255, 255, 255, 0.08),
+    inset 0 5px 14px rgba(17, 17, 26, 0.06);
+  overflow: hidden;
+  cursor: grab;
+  pointer-events: auto;
+  opacity: 0;
+  will-change: width, height, border-radius;
+  transition:
+    box-shadow 0.38s var(--liquid-ease),
+    background 0.38s var(--liquid-ease);
+}
+.liquid-capsule:active {
+  cursor: grabbing;
+}
+
+.liquid-capsule.is-visible {
+  opacity: 1;
+}
+.liquid-capsule.is-visible.is-hover {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.025) 40%, transparent 100%),
+    rgba(16, 20, 18, 0.36);
+  box-shadow:
+    inset 0 0 2px 1px rgba(255, 255, 255, 0.4),
+    inset 0 0 10px 4px rgba(255, 255, 255, 0.1),
+    inset 0 5px 14px rgba(17, 17, 26, 0.05);
+}
+
+.liquid-fill {
+  display: none;
+}
+
+/* Glass mini mode: the opaque backing ends exactly at the 47px bot ring;
+   every pixel outside that green divider belongs to the glass capsule. */
+.liquid-fill.liquid-fill-core {
+  display: block;
+  position: absolute;
+  top: 50%;
+  width: 47px;
+  height: 47px;
+  object-fit: fill;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translateY(-50%) translateZ(0);
+  z-index: 2;
+}
+.overlay-shell.is-dock-right .liquid-fill-core {
+  right: 13px;
+  left: auto;
+}
+.overlay-shell.is-dock-left .liquid-fill-core {
+  left: 13px;
+  right: auto;
+}
+
+.liquid-frost {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='80'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+}
+
+.liquid-glass-bottom {
+  pointer-events: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 86%;
+  z-index: 1;
+  border-radius: inherit;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(16, 20, 14, 0) 0%,
+      rgba(16, 20, 14, 0.08) 32%,
+      rgba(16, 20, 14, 0.16) 100%
+    ),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='80'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+  background-blend-mode: multiply, overlay;
+  -webkit-backdrop-filter: blur(42px) saturate(1.55);
+  backdrop-filter: blur(42px) saturate(1.55);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 22%, #000 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 22%, #000 100%);
+}
+
+.liquid-capsule.is-visible.is-hover .liquid-glass-bottom {
+  -webkit-backdrop-filter: blur(48px) saturate(1.65);
+  backdrop-filter: blur(48px) saturate(1.65);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(16, 20, 14, 0) 0%,
+      rgba(16, 20, 14, 0.1) 32%,
+      rgba(16, 20, 14, 0.2) 100%
+    ),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='80'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+}
+
+.liquid-shine {
+  pointer-events: none;
+  position: absolute;
+  z-index: 0;
+  inset: -20% -40%;
+  background: linear-gradient(
+    108deg,
+    transparent 38%,
+    rgba(255, 255, 255, 0.16) 48%,
+    rgba(201, 255, 61, 0.08) 52%,
+    transparent 62%
+  );
+  transform: translateX(-28%);
+  opacity: 0;
+}
+
+.liquid-capsule.is-visible .liquid-shine {
+  animation: liquid-sheen 7.2s var(--liquid-ease) 0.5s infinite;
+}
+
+.liquid-spec {
+  pointer-events: none;
+  position: absolute;
+  z-index: 0;
+  left: 22px;
+  right: 22px;
+  top: 1px;
+  height: 1px;
+  border-radius: 99px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.62), transparent);
+  box-shadow: 0 0 12px rgba(201, 255, 61, 0.16);
+}
+
+.liquid-chroma {
+  pointer-events: none;
+  position: absolute;
+  z-index: 0;
+  top: 14%;
+  bottom: 14%;
+  width: 18px;
+  opacity: 0.42;
+  border-radius: 99px;
+}
+
+.liquid-chroma-left {
+  left: -3px;
+  background: linear-gradient(90deg, rgba(80, 220, 255, 0.58), rgba(201, 255, 61, 0.14), transparent);
+}
+
+.liquid-chroma-right {
+  right: -3px;
+  background: linear-gradient(270deg, rgba(255, 90, 180, 0.42), rgba(201, 255, 61, 0.12), transparent);
+}
+
+.overlay-body {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1 1 auto;
+  width: 100%;
+  height: 100%;
+}
+.overlay-shell.is-dock-right .overlay-body {
+  justify-content: flex-end;
+}
+.overlay-shell.is-dock-left .overlay-body {
+  justify-content: flex-start;
+}
+.overlay-copy {
+  --hud-ink: #ffffff;
+  --hud-surface: rgba(255, 255, 255, 0.06);
+  --hud-edge: 0 1px 2px rgba(0, 0, 0, 0.45);
+  -webkit-text-stroke: 0;
+  paint-order: stroke fill;
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  min-width: 0;
+  flex: 1 1 auto;
+  padding: 0 6px;
+  overflow: visible;
+  opacity: 1;
+  color: var(--hud-ink);
+  text-shadow: var(--hud-edge);
+  transition: opacity 0.16s ease;
+}
+.overlay-copy.is-hidden {
+  flex: 0 0 0;
+  width: 0;
+  max-width: 0;
+  min-width: 0;
+  padding: 0;
+  gap: 0;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.overlay-row {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 0;
+  font-size: 12px;
+}
+.overlay-row.overlay-main {
+  width: 100%;
+  justify-content: flex-start;
+}
+.overlay-metrics {
+  position: relative;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  min-width: 0;
+  min-height: 16px;
+  flex: 1 1 auto;
+  overflow: visible;
+  padding: 2px 0;
+  color: var(--hud-ink);
+  font-weight: 700;
+  text-shadow: var(--hud-edge);
+}
+.overlay-dots {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  gap: 8px;
+  width: 36px;
+  min-width: 36px;
+  height: 16px;
+  overflow: visible;
+}
+.overlay-metrics > span:not(.overlay-dots) {
+  flex: 0 1 auto;
+  min-width: 0;
+  color: var(--hud-ink);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-shadow: var(--hud-edge);
+}
+.overlay-metrics span {
+  white-space: nowrap;
+}
+.bloub-overlay {
+  position: relative;
+  z-index: 3;
+  flex: 0 0 auto;
+  margin-left: auto;
+  display: grid;
+  place-items: center;
+}
+.overlay-shell.is-dock-right .bloub-overlay {
+  margin-left: auto;
+  order: 2;
+}
+.overlay-shell.is-dock-left .bloub-overlay {
+  margin-right: auto;
+  order: 0;
+}
+.overlay-shell.is-dock-left .overlay-copy {
+  order: 1;
+}
+.bloub-overlay .bloub-hit {
+  width: 47px;
+  height: 47px;
+  cursor: pointer;
+  background: color-mix(in srgb, var(--bloub-ink) 14%, #111a14);
+  box-shadow:
+    inset 0 0 2px 1px color-mix(in srgb, var(--bloub-ink) 55%, transparent),
+    0 0 14px color-mix(in srgb, var(--bloub-ink) 50%, transparent),
+    0 4px 12px rgba(0, 0, 0, 0.18);
+}
+.bloub-alert-badge {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border: 2px solid #161814;
+  border-radius: 999px;
+  color: #161814;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1;
+  text-shadow: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+.bloub-alert-badge.is-warning { background: #ffe49a; }
+.bloub-alert-badge.is-critical { background: #ffb0a6; }
+
+.overlay-shell.is-docked .liquid-capsule {
+  flex: 0 0 auto;
+  align-self: center;
+  border-radius: 999px;
+}
+.liquid-capsule.is-mini {
+  flex: 0 0 auto;
+  width: 73px;
+  height: 73px;
+  max-width: 73px;
+  max-height: 73px;
+  margin: 0;
+  padding: 2px 13px;
+  border-radius: 999px;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.overlay-shell.is-mini .overlay-body,
+.liquid-capsule.is-mini .overlay-body {
+  flex: 0 0 auto;
+  width: 100%;
+  height: 100%;
+  gap: 0;
+  align-items: center;
+}
+.overlay-shell.is-mini .overlay-copy,
+.liquid-capsule.is-mini .overlay-copy {
+  display: none;
+}
+.overlay-shell.is-docked:not(.is-mini).is-dock-right .overlay-body,
+.overlay-shell.is-dock-right.is-peek .overlay-body {
+  justify-content: flex-end;
+}
+.overlay-shell.is-docked:not(.is-mini).is-dock-left .overlay-body,
+.overlay-shell.is-dock-left.is-peek .overlay-body {
+  justify-content: flex-start;
+}
+.liquid-capsule.is-mini .bloub-overlay,
+.overlay-shell.is-mini .bloub-overlay,
+.overlay-shell.is-docked .bloub-overlay {
+  flex: 0 0 auto;
+  margin: 0;
+}
+.liquid-capsule.is-mini .liquid-chroma,
+.liquid-capsule.is-mini .liquid-spec {
+  display: none;
+}
+
+.overlay-main strong {
+  font-size: 15px;
+  font-weight: 700;
+  display: inline;
+  margin: 0;
+  letter-spacing: 0.01em;
+}
+
+.overlay-main .muted,
+.overlay-access .muted {
+  color: var(--hud-ink);
+  opacity: 1;
+  text-shadow: var(--hud-edge);
+}
+
+.overlay-access-slot {
+  display: block;
+  min-width: 0;
+  margin-top: 0;
+  padding-top: 3px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.overlay-access {
+  flex-wrap: nowrap;
+  justify-content: center;
+  width: 100%;
+  padding: 0;
+  color: var(--hud-ink);
+  gap: 6px;
+  overflow: hidden;
+}
+.overlay-access.is-wrap {
+  flex-wrap: wrap;
+  overflow: visible;
+}
+
+.overlay-chip {
+  --slide-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex: 0 0 auto;
+  max-width: 100%;
+  margin: 0;
+  border: 0;
+  font: inherit;
+  color: var(--hud-ink);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.15;
+  padding: 2px 10px 2px 8px;
+  border-radius: 999px;
+  background: var(--hud-surface);
+  text-shadow: var(--hud-edge);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.28),
+    inset 0 0 8px 2px rgba(255, 255, 255, 0.06),
+    0 1px 4px rgba(0, 0, 0, 0.28);
+  overflow: hidden;
+  white-space: nowrap;
+  cursor: pointer;
+}
+button.overlay-chip {
+  background: var(--hud-surface);
+  color: var(--hud-ink);
+  font-weight: 700;
+}
+.overlay-chip-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 16px;
+  width: 16px;
+  height: 16px;
+  color: var(--accent);
+  transform: translateX(-150%);
+  transition: transform 0.5s var(--slide-ease);
+}
+.overlay-chip-label {
+  display: inline-block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transform: translateX(-14px);
+  transition: transform 0.5s var(--slide-ease);
+}
+.overlay-chip:hover,
+.overlay-chip:focus-visible {
+  background: rgba(255, 255, 255, 0.13);
+}
+.overlay-chip:hover .overlay-chip-icon,
+.overlay-chip:focus-visible .overlay-chip-icon {
+  transform: translateX(0);
+}
+.overlay-chip:hover .overlay-chip-label,
+.overlay-chip:focus-visible .overlay-chip-label {
+  transform: translateX(0);
+}
+.overlay-chip:focus-visible {
+  outline: 2px solid rgba(201, 255, 61, 0.7);
+  outline-offset: 2px;
+}
+
+.overlay-access-inline {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.overlay-grip {
+  width: 10px;
+  height: 22px;
+  flex: 0 0 10px;
+  border-radius: 99px;
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0.5) 1.1px, transparent 1.4px) 0 3px / 5px 8px repeat-y,
+    radial-gradient(circle, rgba(255, 255, 255, 0.5) 1.1px, transparent 1.4px) 5px 3px / 5px 8px repeat-y;
+  cursor: grab;
+}
+
+.overlay-root .dot-wrap.compact {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 14px;
+  width: 14px;
+  min-width: 14px;
+  height: 14px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  gap: 0;
+  overflow: visible;
+}
+
+.overlay-root .dot-wrap.compact .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  --dot-glow: var(--muted);
+  background: var(--dot-glow);
+  box-shadow: 0 0 8px 2px var(--dot-glow);
+  animation: overlay-dot-breathe 2.6s ease-in-out infinite;
+}
+.overlay-root .dot-wrap.compact.tone-ok .dot {
+  --dot-glow: var(--ok);
+  background: var(--ok);
+  box-shadow: 0 0 10px 2px var(--ok);
+}
+.overlay-root .dot-wrap.compact.tone-warn .dot {
+  --dot-glow: var(--warn);
+  background: var(--warn);
+  animation-duration: 1.8s;
+}
+.overlay-root .dot-wrap.compact.tone-bad .dot {
+  --dot-glow: var(--danger);
+  background: var(--danger);
+  animation-name: overlay-dot-blink;
+  animation-duration: 1.4s;
+}
+.overlay-root .dot-wrap.compact.tone-unknown .dot {
+  --dot-glow: var(--muted);
+  background: var(--muted);
+}
+.overlay-dots.is-synced .dot-wrap.compact .dot {
+  animation-name: overlay-dot-breathe;
+  animation-duration: 2.6s;
+  animation-delay: 0s;
+}
+
+@keyframes overlay-dot-breathe {
+  0%,
+  100% {
+    opacity: 0.78;
+    box-shadow: 0 0 6px 1px var(--dot-glow);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 11px 3px var(--dot-glow);
+  }
+}
+
+@keyframes overlay-dot-blink {
+  0%,
+  100% {
+    opacity: 0.62;
+    box-shadow: 0 0 5px 1px var(--dot-glow);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 12px 3px var(--dot-glow);
+  }
+}
+
+@keyframes liquid-sheen {
+  0%,
+  18% {
+    transform: translateX(-32%);
+    opacity: 0;
+  }
+  28% {
+    opacity: 0.85;
+  }
+  42% {
+    transform: translateX(32%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(32%);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .liquid-capsule,
+  .liquid-capsule.is-visible,
+  .overlay-access-slot {
+    transition: none;
+    transform: none;
+    opacity: 1;
+  }
+
+  .liquid-capsule.is-visible .liquid-shine {
+    animation: none;
+  }
+
+  .overlay-root .dot-wrap.compact .dot {
+    animation: none;
+    opacity: 1;
+    filter: none;
+  }
+
+  .overlay-chip-icon,
+  .overlay-chip-label {
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Glass mode changes the backing alpha, never the opacity of text or the bot. */
+.liquid-capsule:not(.is-opaque) .overlay-copy {
+  --hud-edge: 0 1px 2px rgba(0, 0, 0, 0.9), 0 0 4px rgba(0, 0, 0, 0.65);
+  -webkit-text-stroke: 0.5px rgba(8, 10, 7, 0.85);
+}
+.liquid-capsule:not(.is-opaque) .overlay-chip {
+  background: rgba(16, 20, 18, 0.5);
+}
+.liquid-capsule:not(.is-opaque) .overlay-chip:hover,
+.liquid-capsule:not(.is-opaque) .overlay-chip:focus-visible {
+  background: rgba(16, 20, 18, 0.6);
+}
+
+/* 实色模式：关掉透桌面的 backdrop-filter，底用无 alpha 的位图。 */
+.liquid-capsule.is-opaque,
+.liquid-capsule.is-opaque.is-visible,
+.liquid-capsule.is-opaque.is-visible.is-hover {
+  transition: box-shadow 0.38s var(--liquid-ease);
+  background-color: #161a17;
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAEUlEQVR42mMQkxLHihiGlgQA7+IRwZjCBp0AAAAASUVORK5CYII=");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  box-shadow:
+    inset 0 0 2px 1px rgba(255, 255, 255, 0.22),
+    inset 0 0 12px 4px rgba(255, 255, 255, 0.05),
+    inset 0 8px 18px rgba(0, 0, 0, 0.35);
+}
+.liquid-capsule.is-opaque .liquid-fill {
+  display: block;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  border-radius: inherit;
+  pointer-events: none;
+  transform: translateZ(0);
+}
+.liquid-capsule.is-opaque,
+.liquid-capsule.is-opaque *,
+.liquid-capsule.is-opaque.is-visible.is-hover .liquid-glass-bottom {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+.liquid-capsule.is-opaque .liquid-frost {
+  z-index: 1;
+  opacity: 0.18;
+}
+.liquid-capsule.is-opaque .liquid-glass-bottom {
+  display: none;
+}

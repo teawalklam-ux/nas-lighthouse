@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" role="img" aria-label="NAS Lighthouse">
+  <title>NAS Lighthouse</title>
+  <rect x="4" y="4" width="72" height="72" rx="16" fill="#ffffff" />
+  <g transform="translate(7.2 7.2) scale(.82)">
+    <path
+      fill="#6d5dfc"
+      fill-rule="evenodd"
+      d="M26 11 40 2l14 9v27H16V26h10V11Zm8 5 6-5 6 5v10H34V16Z"
+    />
+    <path fill="#6d5dfc" d="M28 38h24l1.176471 10H26.823529L28 38Z" />
+    <path fill="#6d5dfc" d="M26.823529 48H35v12h-9.588235l1.411764-12Z" />
+    <path fill="#6d5dfc" d="M45 48h8.176471l1.411764 12H45V48Z" />
+    <path fill="#6d5dfc" d="M25.411765 60h29.17647L56 72H24l1.411765-12Z" />
+    <path fill="#6d5dfc" d="M73 16 57 29l16 13 6-6-10-7 10-7-6-6Z" />
+  </g>
+</svg>

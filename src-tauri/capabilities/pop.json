@@ -1,0 +1,10 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "pop",
+  "description": "悬浮球右键菜单和独立搜索卡片",
+  "windows": ["pop"],
+  "permissions": [
+    "core:default",
+    "opener:default"
+  ]
+}
