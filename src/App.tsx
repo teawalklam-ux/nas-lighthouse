@@ -19,6 +19,7 @@ import { SettingsPage } from "./pages/Settings";
 import { StatusBloub } from "./components/StatusBloub";
 import { parseBloubPin } from "./lib/bloubMood";
 import { Titlebar } from "./components/Titlebar";
+import { StartupLoader } from "./components/StartupLoader";
 import { useWorkspace } from "./lib/useWorkspace";
 import { summarizeAlerts } from "./lib/alerts";
 import type { AppConfig } from "./lib/types";
@@ -30,7 +31,10 @@ export default function App() {
   const workspace = useWorkspace();
   const [page, setPage] = useState<Page>("overview");
   const [searchQuery, setSearchQuery] = useState("");
+  const [showStartupLoader, setShowStartupLoader] = useState(true);
+  const [startupError, setStartupError] = useState<string | null>(null);
   const snap = workspace.snap;
+  const workspaceReady = Boolean(snap && workspace.config);
   const sidebarCollapsed = Boolean(workspace.config?.ui.sidebarCollapsed);
   const alertSummary = summarizeAlerts(workspace.visibleEvents);
 
@@ -59,8 +63,22 @@ export default function App() {
     await workspace.setConfig(saved);
   }
 
+  async function retryStartup() {
+    setStartupError(null);
+    try {
+      await Promise.all([workspace.refreshConfig(), workspace.refreshOverview()]);
+    } catch (error) {
+      setStartupError(String(error));
+    }
+  }
+
   return (
-    <div className={`shell${sidebarCollapsed ? " is-slim" : ""}`}>
+    <>
+      <div
+        className={`shell${sidebarCollapsed ? " is-slim" : ""}`}
+        aria-hidden={showStartupLoader || undefined}
+        inert={showStartupLoader || undefined}
+      >
       <Titlebar />
       <aside>
         <nav>
@@ -110,7 +128,10 @@ export default function App() {
       <main>
         {!snap || !workspace.config ? (
           <div className="page">
-            <p className="muted">正在启动采集…</p>
+            <p className="muted">{startupError || workspace.error || "正在启动采集…"}</p>
+            <button className="fit-btn startup-retry" type="button" onClick={() => void retryStartup()}>
+              重新连接
+            </button>
           </div>
         ) : (
           <>
@@ -177,6 +198,10 @@ export default function App() {
         alerts={alertSummary}
         pin={parseBloubPin(workspace.config?.ui.bloubPin)}
       />
-    </div>
+      </div>
+      {showStartupLoader && (
+        <StartupLoader ready={workspaceReady} onDismiss={() => setShowStartupLoader(false)} />
+      )}
+    </>
   );
 }
